@@ -43,6 +43,7 @@ public class SummaryLVAdapter extends BaseAdapter {
 
         TextView firstNameView = (TextView) row_view.findViewById(R.id.first_name);
         firstNameView.setText(stud.getFirstName());
+        firstNameView.setPadding(0,0,10,0);
         TextView lastNameView = (TextView) row_view.findViewById(R.id.last_name);
         lastNameView.setText(stud.getLastName());
         row_view.setTag(new Integer(i));

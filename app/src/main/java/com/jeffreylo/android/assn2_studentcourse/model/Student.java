@@ -1,5 +1,6 @@
 package com.jeffreylo.android.assn2_studentcourse.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Student {
@@ -8,7 +9,21 @@ public class Student {
     private int mCWID;
     private ArrayList<CourseEnrollment> mCourses;
 
+    public Student() {
+        mFirstName = "";
+        mLastName = "";
+        mCWID = -1;
+        mCourses = new ArrayList<>();
+    }
+
     public Student(String firstName, String lastName, int CWID) {
+        mFirstName = firstName;
+        mLastName = lastName;
+        mCWID = CWID;
+        mCourses = new ArrayList<>();
+    }
+
+    public void set(String firstName, String lastName, int CWID) {
         mFirstName = firstName;
         mLastName = lastName;
         mCWID = CWID;
@@ -44,5 +59,9 @@ public class Student {
 
     public void setCourses(ArrayList<CourseEnrollment> courses) {
         mCourses = courses;
+    }
+
+    public void addCourse( CourseEnrollment c ) {
+        mCourses.add(c);
     }
 }

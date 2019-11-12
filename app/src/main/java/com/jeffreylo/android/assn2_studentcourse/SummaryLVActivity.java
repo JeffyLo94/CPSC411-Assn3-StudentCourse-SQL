@@ -1,8 +1,14 @@
 package com.jeffreylo.android.assn2_studentcourse;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.jeffreylo.android.assn2_studentcourse.adapter.SummaryLVAdapter;
 import com.jeffreylo.android.assn2_studentcourse.model.CourseEnrollment;
@@ -15,6 +21,8 @@ import androidx.annotation.Nullable;
 
 public class SummaryLVActivity extends Activity {
     protected ListView mSummaryView;
+    protected Toolbar mToolbar;
+    protected SummaryLVAdapter ad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,9 +30,32 @@ public class SummaryLVActivity extends Activity {
 
         setContentView(R.layout.sumary_listview);
         createStudents();
+
+
+        mToolbar = findViewById(R.id.toolbar);
+        setActionBar(mToolbar);
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayShowHomeEnabled(true);
+
+        TextView tb_title = findViewById(R.id.title);
+        tb_title.setText("Students List");
+        Button addStudBtn = findViewById(R.id.add_btn);
+        addStudBtn.setOnClickListener(
+                new Button.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), StudentDetailActivity.class);
+//                        intent.putExtra("StudentIndex", ((Integer)view.getTag()).intValue());
+                        v.getContext().startActivity(intent);
+                    }
+                }
+        );
+
+
         mSummaryView = findViewById(R.id.summary_list_view_id);
-        SummaryLVAdapter ad = new SummaryLVAdapter();
+        ad = new SummaryLVAdapter();
         mSummaryView.setAdapter(ad);
+
     }
 
     protected void createStudents() {
@@ -51,5 +82,12 @@ public class SummaryLVActivity extends Activity {
         studList.add(s3);
 
         StudentDB.getInstance().setStudents(studList);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d("Summary Screen", "onStart() called");
+        ad.notifyDataSetChanged();
+        super.onStart();
     }
 }
