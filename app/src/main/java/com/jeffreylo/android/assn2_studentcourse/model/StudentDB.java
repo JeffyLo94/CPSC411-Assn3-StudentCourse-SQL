@@ -24,7 +24,7 @@ public class StudentDB {
 //        mSQLiteDatabase.execSQL("DROP TABLE IF EXISTS CourseEnrollment");
 
 
-        // Create Tables - Requirement 1 and 2
+        // Create Tables if dont exist - Requirement 1 and 2
         new Student().createTable(mSQLiteDatabase);
         new CourseEnrollment().createTable(mSQLiteDatabase);
     }
@@ -50,6 +50,7 @@ public class StudentDB {
             while(c.moveToNext()) {
                 Student s = new Student();
                 s.initFrom(mSQLiteDatabase, c);
+                Log.d("RetrieveStudentObjects", "student courses: "+Integer.toString(s.mCourses.size()));
                 mStudents.add(s);
             }
         }

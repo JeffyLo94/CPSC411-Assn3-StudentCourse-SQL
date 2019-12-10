@@ -49,7 +49,7 @@ public class SummaryLVAdapter extends BaseAdapter {
             row_view = inflater.inflate(R.layout.student_row, viewGroup, false);
         } else row_view = view;
 
-        Student stud = mStudentDB.retriveStudentObjects().get(i);
+        final Student stud = mStudentDB.retriveStudentObjects().get(i);
 
         TextView firstNameView = (TextView) row_view.findViewById(R.id.first_name);
         firstNameView.setText(stud.getFirstName());
@@ -65,6 +65,7 @@ public class SummaryLVAdapter extends BaseAdapter {
                         //
                         Intent intent = new Intent(view.getContext(), StudentDetailActivity.class);
                         intent.putExtra("StudentIndex", ((Integer)view.getTag()).intValue());
+//                        intent.putExtra("StudentObject", stud);
                         view.getContext().startActivity(intent);
                     }
                 }

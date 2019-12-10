@@ -48,6 +48,7 @@ public class CourseEnrollment extends PersistentObject {
         v.put("CourseID", mCourseID);
         v.put("Grade", mGrade);
         v.put("CWID", mCWID);
+        db.execSQL("DELETE FROM CourseEnrollment WHERE CourseID=? AND CWID=?", new String[]{ mCourseID, Integer.toString(mCWID)});
         db.insert("CourseEnrollment", null, v);
     }
 

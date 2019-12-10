@@ -23,6 +23,7 @@ import java.util.ArrayList;
 public class CoursesLVAdapter extends BaseAdapter {
 
     protected Student mStudent;
+    protected SQLiteDatabase mDb;
 //    protected EditText courseView;
 //    protected EditText gradeView;
 
@@ -62,14 +63,24 @@ public class CoursesLVAdapter extends BaseAdapter {
         }
     }
 
-    public CoursesLVAdapter(Student student) {
+    public CoursesLVAdapter(Student student, SQLiteDatabase db) {
         mStudent = student;
+        mDb = db;
 //        ArrayList<CourseEnrollment> courses = mStudent.retriveCoursesFromDB(db);
 //        Log.d("CourseLVAdapter", "courses: "+ Integer.toString(courses.size()));
     }
 
     public Student getStudent() {
         return mStudent;
+    }
+
+    public void saveCoursesToDB() {
+        mDb.execSQL("DELETE FROM CourseEnrollment WHERE CWID=?", new String[]{Integer.toString(mStudent.getCWID())});
+        Log.d("Save Courses To DB", "cwid : "+Integer.toString(mStudent.getCWID()));
+        for (int i = 0; i < getCount(); i++){
+            getItem(i).setCWID(mStudent.getCWID());
+            getItem(i).insert(mDb);
+        }
     }
 
     @Override

@@ -63,8 +63,9 @@ public class Student extends PersistentObject {
         Cursor cursor = db.query("CourseEnrollment", null, "CWID=?", new String[]{new Integer(mCWID).toString()}, null, null, null);
         if (cursor.getCount() >0) {
             while (cursor.moveToNext()) {
-                CourseEnrollment vObj = new CourseEnrollment();
-                vObj.initFrom(db, cursor);
+                CourseEnrollment cObj = new CourseEnrollment();
+                cObj.initFrom(db, cursor);
+                mCourses.add(cObj);
             }
         }
         return mCourses;
@@ -114,11 +115,12 @@ public class Student extends PersistentObject {
         mCourses = new ArrayList<>();
         Cursor cursor = db.query("CourseEnrollment", null, "CWID=?", new String[]{Integer.toString(mCWID)}, null, null, null);
         if (cursor.getCount() >0) {
-            Log.d("Student", "course count: "+Integer.toString(c.getCount()));
+            Log.d("Student", "course count: "+Integer.toString(cursor.getCount()));
 
             while (cursor.moveToNext()) {
                 CourseEnrollment cObj = new CourseEnrollment();
                 cObj.initFrom(db, cursor);
+                mCourses.add(cObj);
             }
         }
     }

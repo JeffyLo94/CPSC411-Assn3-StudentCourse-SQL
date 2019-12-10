@@ -53,12 +53,17 @@ public class StudentDetailActivity extends AppCompatActivity {
         });
 
         final StudentDB studDB = new StudentDB(this);
+        ArrayList<Student> studs = studDB.retriveStudentObjects();
 
-        Log.d("Student Detail Activity", "studIndex"+Integer.toString(studInd));
+        Log.d("Student Detail Activity", "studIndex "+Integer.toString(studInd));
 
         if (studInd >= 0){
             tb_title.setText("Edit Student");
-            studObj = studDB.retriveStudentObjects().get(studInd);
+            studObj = studs.get(studInd);
+            Log.d("Student Detail Activity", "student object: "+studObj.getFirstName());
+            Log.d("Student Detail Activity", "student object courses: "+Integer.toString(studObj.retriveCoursesFromDB(studDB.mSQLiteDatabase).size()));
+
+
         } else {
             tb_title.setText("Add Student");
             studObj = new Student();
@@ -68,7 +73,7 @@ public class StudentDetailActivity extends AppCompatActivity {
 
         // Set Course Info
         mCourses = findViewById(R.id.courses_list);
-        ad = new CoursesLVAdapter(studObj);
+        ad = new CoursesLVAdapter(studObj, studDB.mSQLiteDatabase);
         mCourses.setAdapter(ad);
         Log.d("Student Detail Activity", "courses:"+Integer.toString(ad.getCount()));
 
@@ -78,7 +83,8 @@ public class StudentDetailActivity extends AppCompatActivity {
         add_course_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                studObj.addCourse(new CourseEnrollment("","",studObj.getCWID()));
+                studObj.addCourse(new CourseEnrollment("","", studObj.getCWID()));
+                Log.d("Student Detail Activity", "added a course, total: "+studObj.getCourses().size());
                 ad.notifyDataSetChanged();
             }
         });
@@ -109,13 +115,15 @@ public class StudentDetailActivity extends AppCompatActivity {
                         String lName = lNameView.getText().toString();
                         int cwid = Integer.parseInt(cwidView.getText().toString());
                         studObj.set(fName, lName, cwid);
+
+                        ad.saveCoursesToDB();
+
                         studObj.insert(studDB.mSQLiteDatabase);
                         // Add Courses
-
                         // may already be handled by adapter
 
                         // Add Student to DB
-                        ArrayList<Student> studList = studDB.retriveStudentObjects();
+//                        ArrayList<Student> studList = studDB.retriveStudentObjects();
 
                     } else {
                         // Update existing Student
@@ -125,11 +133,12 @@ public class StudentDetailActivity extends AppCompatActivity {
                         studObj.set(fName, lName, cwid);
 
                         // Add Courses
+//                        ad.saveCoursesToDB();
                         // may already be handled by adapter
 
                         // Update Student in DB
                         studObj.insert(studDB.mSQLiteDatabase);
-                        ArrayList<Student> studList = studDB.retriveStudentObjects();
+//                        ArrayList<Student> studList = studDB.retriveStudentObjects();
                     }
 
                     // Finish Activity
