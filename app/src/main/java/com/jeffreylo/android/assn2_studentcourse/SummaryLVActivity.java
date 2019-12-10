@@ -29,7 +29,7 @@ public class SummaryLVActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.sumary_listview);
-        createStudents();
+//        createStudents();
 
 
         mToolbar = findViewById(R.id.toolbar);
@@ -53,36 +53,36 @@ public class SummaryLVActivity extends Activity {
 
 
         mSummaryView = findViewById(R.id.summary_list_view_id);
-        ad = new SummaryLVAdapter();
+        ad = new SummaryLVAdapter(this);
         mSummaryView.setAdapter(ad);
 
     }
 
-    protected void createStudents() {
-        Student s1 = new Student("Jeffrey", "Lo", 12345678);
-        ArrayList<CourseEnrollment> courses = new ArrayList<>();
-        courses.add(new CourseEnrollment("CPSC-411","A"));
-        courses.add(new CourseEnrollment("CPSC-483","C"));
-        courses.add(new CourseEnrollment("CPSC-386","B"));
-        s1.setCourses(courses);
-
-        Student s2 = new Student("John", "Smith", 00000001);
-        courses = new ArrayList<>();
-        courses.add(new CourseEnrollment("CPSC-411","B"));
-        s2.setCourses(courses);
-
-        Student s3 = new Student("Lena", "Turner", 00000002);
-        courses = new ArrayList<>();
-        courses.add(new CourseEnrollment("CPSC-411","C"));
-        s3.setCourses(courses);
-
-        ArrayList<Student> studList = new ArrayList<>();
-        studList.add(s1);
-        studList.add(s2);
-        studList.add(s3);
-
-        StudentDB.getInstance().setStudents(studList);
-    }
+//    protected void createStudents() {
+//        Student s1 = new Student("Jeffrey", "Lo", 12345678);
+//        ArrayList<CourseEnrollment> courses = new ArrayList<>();
+//        courses.add(new CourseEnrollment("CPSC-411","A"));
+//        courses.add(new CourseEnrollment("CPSC-483","C"));
+//        courses.add(new CourseEnrollment("CPSC-386","B"));
+//        s1.setCourses(courses);
+//
+//        Student s2 = new Student("John", "Smith", 00000001);
+//        courses = new ArrayList<>();
+//        courses.add(new CourseEnrollment("CPSC-411","B"));
+//        s2.setCourses(courses);
+//
+//        Student s3 = new Student("Lena", "Turner", 00000002);
+//        courses = new ArrayList<>();
+//        courses.add(new CourseEnrollment("CPSC-411","C"));
+//        s3.setCourses(courses);
+//
+//        ArrayList<Student> studList = new ArrayList<>();
+//        studList.add(s1);
+//        studList.add(s2);
+//        studList.add(s3);
+//
+//        StudentDB.getInstance().setStudents(studList);
+//    }
 
     @Override
     protected void onStart() {

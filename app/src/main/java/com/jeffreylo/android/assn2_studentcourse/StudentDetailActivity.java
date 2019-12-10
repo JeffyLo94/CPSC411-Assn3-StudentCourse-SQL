@@ -1,6 +1,8 @@
 package com.jeffreylo.android.assn2_studentcourse;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -37,8 +39,6 @@ public class StudentDetailActivity extends AppCompatActivity {
         final EditText lNameView = (EditText) findViewById(R.id.last_name_val_id);
         final EditText cwidView = (EditText) findViewById(R.id.cwid_val_id);
 
-
-
         mToolbar = findViewById(R.id.toolbar);
         setActionBar(mToolbar);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,13 +52,17 @@ public class StudentDetailActivity extends AppCompatActivity {
             }
         });
 
+        final StudentDB studDB = new StudentDB(this);
+
+        Log.d("Student Detail Activity", "studIndex"+Integer.toString(studInd));
+
         if (studInd >= 0){
             tb_title.setText("Edit Student");
-            studObj = StudentDB.getInstance().getStudents().get(studInd);
+            studObj = studDB.retriveStudentObjects().get(studInd);
         } else {
             tb_title.setText("Add Student");
             studObj = new Student();
-            CourseEnrollment c = new CourseEnrollment("","");
+            CourseEnrollment c = new CourseEnrollment("","",studObj.getCWID());
             studObj.addCourse(c);
         }
 
@@ -66,13 +70,15 @@ public class StudentDetailActivity extends AppCompatActivity {
         mCourses = findViewById(R.id.courses_list);
         ad = new CoursesLVAdapter(studObj);
         mCourses.setAdapter(ad);
+        Log.d("Student Detail Activity", "courses:"+Integer.toString(ad.getCount()));
+
 
         // Course Button
         Button add_course_btn = findViewById(R.id.add_course_btn);
         add_course_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                studObj.addCourse(new CourseEnrollment("",""));
+                studObj.addCourse(new CourseEnrollment("","",studObj.getCWID()));
                 ad.notifyDataSetChanged();
             }
         });
@@ -97,18 +103,20 @@ public class StudentDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (studInd < 0) {
-                        // Update new Student
+
+                        // Add new Student
                         String fName = fNameView.getText().toString();
                         String lName = lNameView.getText().toString();
                         int cwid = Integer.parseInt(cwidView.getText().toString());
                         studObj.set(fName, lName, cwid);
+                        studObj.insert(studDB.mSQLiteDatabase);
                         // Add Courses
+
                         // may already be handled by adapter
 
                         // Add Student to DB
-                        ArrayList<Student> studList = StudentDB.getInstance().getStudents();
-                        studList.add(studObj);
-                        StudentDB.getInstance().setStudents(studList);
+                        ArrayList<Student> studList = studDB.retriveStudentObjects();
+
                     } else {
                         // Update existing Student
                         String fName = fNameView.getText().toString();
@@ -120,7 +128,8 @@ public class StudentDetailActivity extends AppCompatActivity {
                         // may already be handled by adapter
 
                         // Update Student in DB
-                        StudentDB.getInstance().getStudents().set(studInd, studObj);
+                        studObj.insert(studDB.mSQLiteDatabase);
+                        ArrayList<Student> studList = studDB.retriveStudentObjects();
                     }
 
                     // Finish Activity

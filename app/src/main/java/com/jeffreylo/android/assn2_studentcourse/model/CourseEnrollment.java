@@ -1,12 +1,20 @@
 package com.jeffreylo.android.assn2_studentcourse.model;
 
-public class CourseEnrollment {
-    private String mCourseID;
-    private String mGrade;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
-    public CourseEnrollment(String courseID, String grade) {
+public class CourseEnrollment extends PersistentObject {
+    protected String mCourseID;
+    protected String mGrade;
+    protected int mCWID;
+
+    public CourseEnrollment() {}
+
+    public CourseEnrollment(String courseID, String grade, int CWID) {
         mCourseID = courseID;
         mGrade = grade;
+        mCWID = CWID;
     }
 
     public String getCourseID() {
@@ -23,5 +31,35 @@ public class CourseEnrollment {
 
     public void setGrade(String grade) {
         mGrade = grade;
+    }
+
+    public int getCWID() {
+        return mCWID;
+    }
+
+    public void setCWID(int CWID) {
+        mCWID = CWID;
+    }
+
+
+    @Override
+    public void insert(SQLiteDatabase db) {
+        ContentValues v = new ContentValues();
+        v.put("CourseID", mCourseID);
+        v.put("Grade", mGrade);
+        v.put("CWID", mCWID);
+        db.insert("CourseEnrollment", null, v);
+    }
+
+    @Override
+    public void createTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS CourseEnrollment (CourseID Text, Grade Text, CWID INTEGER)");
+    }
+
+    @Override
+    public void initFrom(SQLiteDatabase db, Cursor c) {
+        mCourseID = c.getString(c.getColumnIndex("CourseID"));
+        mGrade = c.getString(c.getColumnIndex("Grade"));
+        mCWID = c.getInt(c.getColumnIndex("CWID"));
     }
 }

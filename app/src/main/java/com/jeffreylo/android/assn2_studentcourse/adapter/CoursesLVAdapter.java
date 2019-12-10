@@ -1,6 +1,7 @@
 package com.jeffreylo.android.assn2_studentcourse.adapter;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +17,8 @@ import com.jeffreylo.android.assn2_studentcourse.StudentDetailActivity;
 import com.jeffreylo.android.assn2_studentcourse.model.CourseEnrollment;
 import com.jeffreylo.android.assn2_studentcourse.model.Student;
 import com.jeffreylo.android.assn2_studentcourse.model.StudentDB;
+
+import java.util.ArrayList;
 
 public class CoursesLVAdapter extends BaseAdapter {
 
@@ -61,6 +64,8 @@ public class CoursesLVAdapter extends BaseAdapter {
 
     public CoursesLVAdapter(Student student) {
         mStudent = student;
+//        ArrayList<CourseEnrollment> courses = mStudent.retriveCoursesFromDB(db);
+//        Log.d("CourseLVAdapter", "courses: "+ Integer.toString(courses.size()));
     }
 
     public Student getStudent() {

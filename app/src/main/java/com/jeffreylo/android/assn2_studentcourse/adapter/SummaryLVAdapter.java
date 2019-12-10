@@ -1,5 +1,6 @@
 package com.jeffreylo.android.assn2_studentcourse.adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +10,28 @@ import android.widget.TextView;
 
 import com.jeffreylo.android.assn2_studentcourse.R;
 import com.jeffreylo.android.assn2_studentcourse.StudentDetailActivity;
+import com.jeffreylo.android.assn2_studentcourse.SummaryLVActivity;
 import com.jeffreylo.android.assn2_studentcourse.model.Student;
 import com.jeffreylo.android.assn2_studentcourse.model.StudentDB;
 
 public class SummaryLVAdapter extends BaseAdapter {
 
+    public StudentDB mStudentDB;
+
+    public SummaryLVAdapter(Context c){
+        mStudentDB = new StudentDB(c);
+        mStudentDB.createSampleStudentObjs();
+        mStudentDB.retriveStudentObjects();
+    }
+
     @Override
     public int getCount() {
-        return StudentDB.getInstance().getStudents().size();
+        return mStudentDB.getStudents().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return StudentDB.getInstance().getStudents().get(position);
+        return mStudentDB.getStudents().get(position);
     }
 
     @Override
@@ -39,7 +49,7 @@ public class SummaryLVAdapter extends BaseAdapter {
             row_view = inflater.inflate(R.layout.student_row, viewGroup, false);
         } else row_view = view;
 
-        Student stud = StudentDB.getInstance().getStudents().get(i);
+        Student stud = mStudentDB.retriveStudentObjects().get(i);
 
         TextView firstNameView = (TextView) row_view.findViewById(R.id.first_name);
         firstNameView.setText(stud.getFirstName());
